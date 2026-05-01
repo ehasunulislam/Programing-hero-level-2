@@ -1,3 +1,3 @@
-const names: string = "Ehasun";
+// const names: string = "Ehasun";
 
-console.log(names);
+// console.log(names);
