@@ -8,6 +8,6 @@ export const readProduct = () => {
     // console.log(filePth);
 
     const product = fs.readFileSync(filePth, "utf-8");
-    console.log(JSON.parse(product));
+    // console.log(JSON.parse(product));
     return JSON.parse(product)
 }
