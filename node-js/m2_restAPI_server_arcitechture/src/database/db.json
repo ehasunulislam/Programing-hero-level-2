@@ -1,62 +1,13 @@
 [
-  {
-    "id": 1,
-    "name": "apple",
-    "color": "red",
-    "bit": "1 bite"
-  },
-  {
-    "id": 2,
-    "name": "banana",
-    "color": "yellow",
-    "bit": "2 bites"
-  },
-  {
-    "id": 3,
-    "name": "orange",
-    "color": "orange",
-    "bit": "3 bites"
-  },
-  {
-    "id": 4,
-    "name": "grape",
-    "color": "purple",
-    "bit": "1 bite"
-  },
-  {
-    "id": 5,
-    "name": "mango",
-    "color": "green",
-    "bit": "4 bites"
-  },
-  {
-    "id": 6,
-    "name": "watermelon",
-    "color": "green",
-    "bit": "5 bites"
-  },
-  {
-    "id": 7,
-    "name": "strawberry",
-    "color": "red",
-    "bit": "2 bites"
-  },
-  {
-    "id": 8,
-    "name": "pineapple",
-    "color": "brown",
-    "bit": "6 bites"
-  },
-  {
-    "id": 9,
-    "name": "kiwi",
-    "color": "green",
-    "bit": "1 bite"
-  },
-  {
-    "id": 10,
-    "name": "blueberry",
-    "color": "blue",
-    "bit": "2 bites"
-  }
+  { "id": 1, "name": "apple", "color": "red", "bit": "1 bite" },
+  { "id": 2, "name": "banana", "color": "yellow", "bit": "2 bites" },
+  { "id": 3, "name": "orange", "color": "orange", "bit": "3 bites" },
+  { "id": 4, "name": "grape", "color": "purple", "bit": "1 bite" },
+  { "id": 5, "name": "mango", "color": "green", "bit": "4 bites" },
+  { "id": 6, "name": "watermelon", "color": "green", "bit": "5 bites" },
+  { "id": 7, "name": "strawberry", "color": "red", "bit": "2 bites" },
+  { "id": 8, "name": "pineapple", "color": "brown", "bit": "6 bites" },
+  { "id": 9, "name": "kiwi", "color": "green", "bit": "1 bite" },
+  { "id": 10, "name": "blueberry", "color": "blue", "bit": "2 bites" },
+  { "id": 1778670998715, "name": "lichi 41", "color": "yellow" }
 ]
