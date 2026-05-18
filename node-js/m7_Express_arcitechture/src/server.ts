@@ -5,8 +5,8 @@ import { initDB } from "./db";
 const main = () => {
   initDB();
   app.listen(config.port, () => {
-    console.log(`server is running on port http://localhost:${config.port}`)
+    console.log(`Example app listening on port ${config.port}`);
   });
-}
+};
 
 main();

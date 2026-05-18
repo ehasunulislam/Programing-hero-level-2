@@ -1,160 +1,27 @@
-import express, { type Application, type Request, type Response } from "express"
-import { pool } from "./db";
-
+import express, {
+  type Application,
+  type Request,
+  type Response,
+} from "express";
+import { profileRoute } from "./modules/profile/profile.route";
+import { userRoute } from "./modules/user/user.route";
+import { authRoute } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
 app.use(express.json());
+app.use(express.text());
+app.use(express.urlencoded({ extended: true }));
 
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-})
-
-
-// post method in first time postgrase
-app.post("/api/user", async(req: Request, res: Response) => {
-  const {name, email, password, age} = req.body;
-
-  try{
-    const result = await pool.query(`
-    INSERT INTO users(name, email, password, age) 
-    VALUES($1, $2, $3, $4) 
-    RETURNING *
-  `, [name, email, password, age]);
-
-  res.status(201).json({
-    message: "user created",
-    data: result.rows[0]
-  })
-  }
-  catch(err: any) {
-    res.status(500).json({
-      message: err.message,
-      error: err
-    })
-  }
+app.get("/", (req: Request, res: Response) => {
+  //res.send("Hello World!");
+  res.status(200).json({
+    message: "Express Server",
+    author: "Next Level",
+  });
 });
 
-
-// get method for ALL user
-app.get("/api/user", async(req: Request, res: Response) => {
-  try{
-    const result = await pool.query(`
-        SELECT * FROM users
-      `)
-
-      res.status(201).json({
-        success: "true",
-        message: "User retieved",
-        data: result.rows
-      })
-  }
-  catch(err: any) {
-    res.status(500).json({
-      message: err.message,
-      error: err
-    })
-  }
-});
-
-// get method for single user
-app.get("/api/user/:id", async(req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try{
-    const result = await pool.query(
-      `SELECT * FROM users WHERE id=$1`,
-        [id]);
-
-      if(result.rows.length === 0) {
-          res.status(404).json({
-          success: "false",
-          message: "user not found",
-          data: {}
-        });
-      }  
-
-      res.status(201).json({
-        success: "true",
-        message: "single User retieved",
-        data: result.rows[0]
-      });
-  }
-  catch(err: any) {
-     res.status(500).json({
-      message: err.message,
-      error: err
-    })
-  }
-});
-
-
-// put method for user
-app.put("/api/user/:id", async(req: Request, res: Response) => {
-    const { id } = req.params;
-    const { name, password, age, is_active } = req.body;
-
-    const result = await pool.query(
-      `UPDATE users SET 
-        name=COALESCE($1, name),
-        password=COALESCE($2, password),
-        age=COALESCE($3, age),
-        is_active=COALESCE($4, is_active)
-
-      WHERE id=$5 RETURNING *`,
-      [name, password, age, is_active, id]
-    );
-
-
-     if(result.rows.length === 0) {
-          res.status(404).json({
-          success: "false",
-          message: "user not found",
-          data: {}
-        });
-      }  
-
-    res.status(201).json({
-      success: "true",
-      message: "User updated",
-      data: result.rows[0]
-    });
-});
-
-
-
-// DELETE method for user
-app.delete("/api/user/:id", async(req: Request, res: Response) => {
-  const { id } = req.params;
-
-  try{
-    const result = await pool.query(`
-      DELETE FROM users WHERE id=$1 
-      `, [id]);
-
-
-      if(result.rows.length === 0) {
-          res.status(404).json({
-          success: "false",
-          message: "user not found",
-          data: {}
-        });
-      }  
-
-      res.status(201).json({
-        success: "true",
-        message: "User deleted",
-        data: {}
-      });
-  }
-  catch(err: any) {
-     res.status(500).json({
-      message: err.message,
-      error: err
-    })
-  }
-});
-
-
-export default app
+app.use("/api/users", userRoute);
+app.use("/api/profile", profileRoute);
+app.use("/api/auth", authRoute);
+export default app;
