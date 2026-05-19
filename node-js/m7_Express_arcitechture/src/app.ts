@@ -6,12 +6,17 @@ import express, {
 import { profileRoute } from "./modules/profile/profile.route";
 import { userRoute } from "./modules/user/user.route";
 import { authRoute } from "./modules/auth/auth.route";
+import logger from "./middleware/logger";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+
+// middleware learn 
+app.use(logger);
+
 
 app.get("/", (req: Request, res: Response) => {
   //res.send("Hello World!");
