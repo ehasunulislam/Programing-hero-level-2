@@ -112,3 +112,39 @@ Method: GET, URL: /api/users, Time: 2026-05-20T10:06:01.195Z
 Method: GET, URL: /api/users, Time: 2026-05-20T10:11:27.509Z
 
 Method: GET, URL: /api/users, Time: 2026-05-20T10:11:47.268Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:18:35.817Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:27:11.893Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:28:32.158Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:28:58.335Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:33:08.147Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:33:33.627Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:34:53.193Z
+
+Method: POST, URL: /api/users, Time: 2026-05-20T12:37:01.311Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T12:39:14.935Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:29:47.308Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:30:29.015Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:31:48.687Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:34:51.450Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:35:09.064Z
+
+Method: GET, URL: /api/users, Time: 2026-05-20T14:35:15.271Z
+
+Method: POST, URL: /api/auth/login, Time: 2026-05-20T14:45:00.295Z
+
+Method: POST, URL: /api/auth/login, Time: 2026-05-20T14:45:38.636Z
+
+Method: POST, URL: /api/auth/login, Time: 2026-05-21T08:08:31.565Z

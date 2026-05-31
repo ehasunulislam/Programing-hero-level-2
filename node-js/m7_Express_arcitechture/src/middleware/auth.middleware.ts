@@ -4,8 +4,9 @@ import config from "../config";
 import { pool } from "../db";
 
 // auth middleware
-const auth = () => {
+const auth = (...roles: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
+    console.log(roles);
     try {
       // console.log("This is protected route");
       // console.log(req.headers.authorization);
@@ -34,26 +35,26 @@ const auth = () => {
       const user = userData.rows[0];
       // console.log(user)
 
-      if (user.rows.length === 0) {
-        res.status(401).json({
-          success: false,
-          message: "user not found",
-        });
-      }
+      // if (user.rows.length === 0) {
+      //   res.status(401).json({
+      //     success: false,
+      //     message: "user not found",
+      //   });
+      // }
 
-      if (!user.is_active) {
+      if (!user?.is_active) {
         res.status(401).json({
           success: false,
           message: "forbidden",
         });
       }
 
-      // if(!user) {
-      //     res.status(401).json({
-      //         success: false,
-      //         message: "user not found"
-      //     })
-      // }
+      if(!user) {
+          res.status(401).json({
+              success: false,
+              message: "user not found"
+          })
+      }
 
       req.user = decoded;
       next();
