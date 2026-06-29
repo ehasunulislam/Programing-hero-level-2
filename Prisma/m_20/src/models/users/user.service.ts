@@ -14,9 +14,9 @@ const registerUserIntoDB = async(payload: RegisterUserPayload) => {
         }
     });
 
-    if(isUserExist) {
-        throw new Error("User already exists");
-    }
+    // if(isUserExist) {
+    //     throw new Error("User already exists with this email");
+    // }
 
     const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
 
