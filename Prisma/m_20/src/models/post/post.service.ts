@@ -1,4 +1,5 @@
 import { CommentStatus, postStatus } from "../../../prisma/generated/prisma/enums";
+import { PostWhereInput } from "../../../prisma/generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import { IcreatePostPayload, IPostQuery, IUpdatePostPayload } from "./post.interface";
 
@@ -21,35 +22,72 @@ const getPosts = async (query: IPostQuery) => {
   const page = query.page ? Number(query.page) : 1;
   const skip = (page - 1) * limit;
   const sortBy = query.sortBy ? query.sortBy : "createdAt";
-  const sortOrder = query.sortOrder ? query.sortOrder : "desc"
+  const sortOrder = query.sortOrder ? query.sortOrder : "desc";
+
+  const tags = query.tags ? JSON.parse(query.tags as string) : null
+  const tagsArray = Array.isArray(tags) ? tags : []
+
+  const andCondition : PostWhereInput[] = [];
+  if(query.searchTearm) {
+    OR : [
+      {
+        title : {
+          contains: query.searchTearm,
+          mode: "insensitive"
+        },
+      },
+      {
+        content: {
+          contains: query.searchTearm,
+          mode: "insensitive"
+        }
+      }
+    ]
+  }
+
+  if(query.title) {
+    andCondition.push({
+      title: query.title
+    })
+  }
+
+  if(query.content) {
+    andCondition.push({
+      content: query.content
+    })
+  }
+
+  if(query.authorId) {
+    andCondition.push({
+      authorId: query.authorId
+    })
+  }
+
+  if(query.isFeatured) {
+    andCondition.push({
+      isFeatured: Boolean(query.isFeatured)
+    })
+  }
+
+  if(query.tags) {
+    andCondition.push({
+      tags: {
+        hasSome: tagsArray
+      }
+    })
+  }
+
+  
+  if(query.status) {
+    andCondition.push({
+      status: query.status
+    })
+  }
 
   const posts = await prisma.post.findMany({
     // searching or partial match
     where: {
-      AND: [
-        query.searchTearm ? {
-          OR : [
-            {
-              title : {
-                contains: query.searchTearm,
-                mode: "insensitive"
-              },
-            },
-            {
-              content: {
-                contains: query.searchTearm,
-                mode: "insensitive"
-              }
-            }
-          ]
-        } : {},
-
-        // title filtering
-        query.title ? {title: query.title} : {},
-
-        // comment filtering
-        query.content ? {content: query.content} : {}
-      ]
+      AND: andCondition
     },
 
     take: limit,
