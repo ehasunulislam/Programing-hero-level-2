@@ -22,5 +22,5 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
         errorCode: err.code || null,
         message: errorMessage,
         error: err.stack
-      });
+    });
 }
