@@ -4,6 +4,20 @@ import { prisma } from "../../lib/prisma";
 import { IcreatePostPayload, IPostQuery, IUpdatePostPayload } from "./post.interface";
 
 const createPost = async (payload: IcreatePostPayload, userId: string) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: userId
+    },
+    include: {
+      subscription: true
+    }
+  });
+
+  if(payload.isPremimum && user.subscription?.status !== "ACTIVE") {
+    throw new Error("u are not a premium user, please subscribe to create premium post")
+  }
+
+
   const result = await prisma.post.create({
     data: {
       ...payload,
@@ -84,6 +98,10 @@ const getPosts = async (query: IPostQuery) => {
     })
   }
 
+  andCondition.push({
+    isPremimum: false
+  })
+
   const posts = await prisma.post.findMany({
     // searching or partial match
     where: {
@@ -107,7 +125,21 @@ const getPosts = async (query: IPostQuery) => {
     },
   });
 
-  return posts;
+  const totalPostCount = await prisma.post.count({
+    where: {
+      AND: andCondition
+    }
+  })
+
+  return {
+    data: posts,
+    meta: {
+      page: page,
+      limit: limit,
+      total: totalPostCount,
+      totalPage: Math.ceil(totalPostCount / limit)
+    }
+  };
 };
 
 const getPostById = async (postId: string) => {
@@ -128,169 +160,170 @@ const getPostById = async (postId: string) => {
 
 //   return post;
 
-    const transactionResult = await prisma.$transaction(
-        async(tx) => {
-            await tx.post.update({
-                where: {
-                    id: postId  
-                },
-                data: {
-                    veiws: {
-                        increment: 1
-                    }
+  const transactionResult = await prisma.$transaction(
+    async(tx) => {
+        await tx.post.update({
+            where: {
+              id: postId,                   
+            },
+            data: {
+                veiws: {
+                    increment: 1
                 }
-            });
+            }
+        });
 
-            const post = await tx.post.findUniqueOrThrow({
-                where: {
-                    id: postId
+        const post = await tx.post.findUniqueOrThrow({
+            where: {
+                id: postId,
+                isPremimum:  false
+            },
+
+            include: {
+                author: {
+                    omit: {
+                        password: true
+                    }
                 },
 
-                include: {
-                    author: {
-                        omit: {
-                            password: true
-                        }
+                comments: {
+                    where:{
+                        status: CommentStatus.APPROVED
                     },
 
-                    comments: {
-                        where:{
-                            status: CommentStatus.APPROVED
-                        },
+                    orderBy: {
+                        createdAt: "desc"
+                    }
+                },
 
-                        orderBy: {
-                            createdAt: "desc"
-                        }
-                    },
-
-                    _count: {
-                        select: {
-                            comments: true
-                        }
+                _count: {
+                    select: {
+                        comments: true
                     }
                 }
-            })
+            }
+        })
 
-            return post
-        }
-    );
+        return post
+    }
+  );
 
-    return transactionResult
+  return transactionResult
 };
 
 const getPostsStats = async () => {
-    const transactionResult = await prisma.$transaction(
-        async(tx) => {
-            // const totalPosts = await tx.post.count();
+  const transactionResult = await prisma.$transaction(
+    async(tx) => {
+        // const totalPosts = await tx.post.count();
 
-            // const totalPublishedPosts = await tx.post.count({
-            //     where: {
-            //         status: postStatus.PUBLISHED
-            //     }
-            // });
+        // const totalPublishedPosts = await tx.post.count({
+        //     where: {
+        //         status: postStatus.PUBLISHED
+        //     }
+        // });
 
-            // const totalDraftPosts = await tx.post.count({
-            //     where: {
-            //         status: postStatus.DRAFT
-            //     }
-            // });
+        // const totalDraftPosts = await tx.post.count({
+        //     where: {
+        //         status: postStatus.DRAFT
+        //     }
+        // });
 
-            // const totalArchivedPosts = await tx.post.count({
-            //     where: {
-            //         status: postStatus.ARCHIVED
-            //     }
-            // });
+        // const totalArchivedPosts = await tx.post.count({
+        //     where: {
+        //         status: postStatus.ARCHIVED
+        //     }
+        // });
 
-            // const totalComments = await tx.comment.count();
+        // const totalComments = await tx.comment.count();
 
-            // const totalApprovedComments = await tx.comment.count({
-            //     where: {
-            //         status: CommentStatus.APPROVED
-            //     }
-            // });
+        // const totalApprovedComments = await tx.comment.count({
+        //     where: {
+        //         status: CommentStatus.APPROVED
+        //     }
+        // });
 
-            // const totalRejectedComments = await tx.comment.count({
-            //     where: {
-            //         status: CommentStatus.REJECT
-            //     }
-            // });
+        // const totalRejectedComments = await tx.comment.count({
+        //     where: {
+        //         status: CommentStatus.REJECT
+        //     }
+        // });
 
-            // const totalPostViews = await tx.post.aggregate({
-            //     _sum: {
-            //         veiws: true
-            //     }
-            // })
+        // const totalPostViews = await tx.post.aggregate({
+        //     _sum: {
+        //         veiws: true
+        //     }
+        // })
 
-            // return {
-            //     totalPosts,
-            //     totalPublishedPosts,
-            //     totalDraftPosts,
-            //     totalArchivedPosts,
-            //     totalComments,
-            //     totalApprovedComments,
-            //     totalRejectedComments,
-            //     totalPostViews
-            // }
+        // return {
+        //     totalPosts,
+        //     totalPublishedPosts,
+        //     totalDraftPosts,
+        //     totalArchivedPosts,
+        //     totalComments,
+        //     totalApprovedComments,
+        //     totalRejectedComments,
+        //     totalPostViews
+        // }
 
-          const [
-              totalPosts,
-              totalPublishedPosts,
-              totalDraftPosts,
-              totalArchivedPosts,
-              totalComments,
-              totalApprovedComments,
-              totalRejectedComments,
-              totalPostViews
-              ] = await Promise.all([
-                  await tx.post.count(),
-                  await tx.post.count({
-                      where: {
-                          status: postStatus.PUBLISHED
-                      }
-                  }),
-                  await tx.post.count({
-                      where: {
-                          status: postStatus.DRAFT
-                      }
-                  }),
-                  await tx.post.count({
-                      where: {
-                          status: postStatus.ARCHIVED
-                      }
-                  }),
-                  await tx.comment.count(),
-                  await tx.comment.count({
-                      where: {
-                          status: CommentStatus.APPROVED
-                      }
-                  }),
-                  await tx.comment.count({
-                      where: {
-                          status: CommentStatus.REJECT
-                      }
-                  }),
-                  await tx.post.aggregate({
-                      _sum: {
-                          veiws: true
-                      }
-                  })
-          ])
+    const [
+        totalPosts,
+        totalPublishedPosts,
+        totalDraftPosts,
+        totalArchivedPosts,
+        totalComments,
+        totalApprovedComments,
+        totalRejectedComments,
+        totalPostViews
+        ] = await Promise.all([
+            await tx.post.count(),
+            await tx.post.count({
+                where: {
+                    status: postStatus.PUBLISHED
+                }
+            }),
+            await tx.post.count({
+                where: {
+                    status: postStatus.DRAFT
+                }
+            }),
+            await tx.post.count({
+                where: {
+                    status: postStatus.ARCHIVED
+                }
+            }),
+            await tx.comment.count(),
+            await tx.comment.count({
+                where: {
+                    status: CommentStatus.APPROVED
+                }
+            }),
+            await tx.comment.count({
+                where: {
+                    status: CommentStatus.REJECT
+                }
+            }),
+            await tx.post.aggregate({
+                _sum: {
+                    veiws: true
+                }
+            })
+    ])
 
-          return {
-                  totalPosts,
-                  totalPublishedPosts,
-                  totalDraftPosts,
-                  totalArchivedPosts,
-                  totalComments,
-                  totalApprovedComments,
-                  totalRejectedComments,
-                  totalPostViews : totalPostViews._sum.veiws
-          }
-        }
+    return {
+            totalPosts,
+            totalPublishedPosts,
+            totalDraftPosts,
+            totalArchivedPosts,
+            totalComments,
+            totalApprovedComments,
+            totalRejectedComments,
+            totalPostViews : totalPostViews._sum.veiws
+    }
+    }
 
-    )
+  )
 
-    return transactionResult
+  return transactionResult
 };
 
 // my-post

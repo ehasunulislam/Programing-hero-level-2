@@ -29,7 +29,8 @@ const getPosts = catchAsync(
       success: true,
       statusCode: httpStatus.CREATED,
       message: "All posts here",
-      data: result,
+      data: result.data,
+      meta: result.meta
     });
   },
 );

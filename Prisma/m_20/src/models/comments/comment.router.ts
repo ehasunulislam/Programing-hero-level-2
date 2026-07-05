@@ -10,7 +10,8 @@ router.post("/", authMiddleware.auth(Role.ADMIN, Role.AUTHOR, Role.USER), commen
 
 router.get("/auth/:authorId", commentController.getCommentByAuthorId);
 
-router.get("/:commentId", commentController.getCommentByPostId);
+// how many comment in 1 post
+router.get("/:postId", commentController.getCommentByPostId);
 
 router.patch(
     "/:commentId",
