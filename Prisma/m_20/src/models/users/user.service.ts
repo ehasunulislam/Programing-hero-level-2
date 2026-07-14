@@ -52,7 +52,8 @@ const registerUserIntoDB = async(payload: RegisterUserPayload) => {
             profile: true
         }
     });
-  return user;
+    
+    return user;
 };
 
 
