@@ -38,6 +38,8 @@ After a successful login, the application displays a success toast notification 
 > - Uses `useEffect` to react to changes in the authentication state.
 
 ```tsx
+import { useRouter } from "next/navigation"
+
 const router = useRouter();
 
 useEffect(() => {
