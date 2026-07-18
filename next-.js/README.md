@@ -24,3 +24,35 @@ if (result.success) {
   });
 }
 ```
+
+
+## 🔄 Client-Side Redirect After Successful Login
+
+After a successful login, the application displays a success toast notification and redirects the user to the dashboard using Next.js `useRouter()`.
+
+> **💡 Highlights**
+>
+> - Displays a success message using **react-hot-toast**.
+> - Redirects authenticated users to the **Dashboard**.
+> - Shows an error toast if the login attempt fails.
+> - Uses `useEffect` to react to changes in the authentication state.
+
+```tsx
+const router = useRouter();
+
+useEffect(() => {
+  if (!state) return;
+
+  if (state.success) {
+    toast.success(state.message || "Login successful");
+    router.push("/dashboard");
+  }
+
+  if (!state.success) {
+    toast.error(state.message || "Login failed");
+  }
+}, [state, router]);
+```
+
+> **📌 Note:**  
+> `router.push("/dashboard")` performs a **client-side navigation**, meaning the page changes without a full browser refresh, providing a faster and smoother user experience.
