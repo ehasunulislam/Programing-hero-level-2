@@ -1,11 +1,11 @@
 import React from 'react'
 
-const author = () => {
+const newsByIdPaage = () => {
   return (
     <div>
-      author
+      
     </div>
   )
 }
 
-export default author
+export default newsByIdPaage
