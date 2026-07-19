@@ -2,14 +2,15 @@ import { Navbar } from '@/components/shared/Navbar'
 import { getMe } from '@/service/getMe'
 import React from 'react'
 
-const dashboardLayout = async({children}: {children: React.ReactNode}) => {
-  const user = await getMe()
+const publicLayout = async ({children}: {children: React.ReactNode}) => {
+
+    const user = await getMe()
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full mx-auto ">
       <Navbar user={user} />
       {children}
     </div>
   )
 }
 
-export default dashboardLayout
+export default publicLayout
