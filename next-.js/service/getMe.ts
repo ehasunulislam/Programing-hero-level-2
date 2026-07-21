@@ -29,7 +29,6 @@ export const getMe = async() => {
     });
 
     const result = res.json();
-    console.log(result);
 
     return result
 }
