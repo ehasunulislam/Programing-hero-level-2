@@ -22,6 +22,8 @@ const navItems = [
   { label: "Projects", href: "/projects" },
   { label: "Team", href: "/team" },
   { label: "Pricing", href: "/pricing" },
+  { label: "News", href: "/news" },
+  { label: "Premimum", href: "/premimum" },
 ]
 
 const userMenuItems = [
@@ -101,7 +103,7 @@ export function Navbar({user}: NavbarProps) {
         {/* User dropdown */}
         {
           user.success ? (
-                    <DropdownMenu>
+         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
               <Avatar className="h-9 w-9">
