@@ -5,9 +5,7 @@ import { IPost } from "@/lib/types";
 import { NewsCard } from "./NewsCard";
 import { getPremiumNews } from "../../_action/getPremiumNews";
 
-export async function PremiumNewsList({
-  searchParams,
-}: {
+export async function PremiumNewsList({ searchParams }: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const query = await searchParams;

@@ -45,7 +45,7 @@ const createCheckoutService = async(userId : string) => {
             mode: "subscription",
             customer: stripeCustomerId,
             payment_method_types: ["card"],
-            success_url: `${config.app_url}/premimum?success=true`,
+            success_url: `${config.app_url}/premium?success=true`,
             cancel_url: `${config.app_url}/payment?success=false`,
             metadata: { userId: user.id }
         });

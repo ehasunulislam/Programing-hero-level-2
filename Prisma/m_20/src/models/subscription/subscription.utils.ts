@@ -20,8 +20,10 @@ export const hadnleCheckotComepleted = async(session: Stripe.Checkout.Session) =
     // console.log("checkout.session.completed");
 
     // const session: Stripe.Checkout.Session = event.data.object;
+    console.log("✅ checkout.session.completed called");
 
     const userId = session.metadata?.userId;
+    console.log("userId:", userId);
 
     const stripeCustomerId = session.customer as string;
     const stripeSubscriptoinId = session.subscription as string;
