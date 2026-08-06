@@ -4,4 +4,5 @@ Command Line
 
 
     npm i -g tsx  => download tsx globally </br>
-    tsx watch src/"file name" => run watch mode 
+    tsx watch src/"file name" => run watch mode
+   
